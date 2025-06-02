@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { Play } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Parallax } from 'react-parallax';
-import AnimatedText from './AnimatedText';
 
 interface HeroProps {
   title: string;
@@ -12,7 +11,6 @@ interface HeroProps {
   ctaLink: string;
   videoBtnText?: string;
   videoBtnLink?: string;
-  backgroundImage?: string;
 }
 
 const Hero: React.FC<HeroProps> = ({
@@ -24,89 +22,71 @@ const Hero: React.FC<HeroProps> = ({
   videoBtnLink,
 }) => {
   return (
-    <Parallax
-      blur={0}
-      bgImage="https://images.pexels.com/photos/3183183/pexels-photo-3183183.jpeg"
-      strength={200}
-      className="relative overflow-hidden"
-    >
-      <div className="relative min-h-screen flex items-center">
-        {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/90 to-secondary/90" />
+    <div className="relative min-h-screen overflow-hidden">
+      {/* Video Background */}
+      <video
+        autoPlay
+        muted
+        loop
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover"
+      >
+        <source src="https://assets.mixkit.co/videos/preview/mixkit-digital-animation-of-a-network-24970-large.mp4" type="video/mp4" />
+      </video>
 
-        {/* Animated background elements */}
-        <motion.div
-          className="absolute top-0 right-0 w-1/2 h-full bg-accent/10 rounded-bl-[200px]"
-          initial={{ x: 200, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          transition={{ duration: 1, ease: "easeOut" }}
-        />
-        <motion.div
-          className="absolute bottom-0 left-0 w-64 h-64 bg-white/5 rounded-full -ml-32 -mb-16"
-          animate={{
-            y: [0, -20, 0],
-            rotate: [0, 360],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: "linear"
-          }}
-        />
-        <motion.div
-          className="absolute top-1/4 right-1/4 w-32 h-32 bg-white/5 rounded-full"
-          animate={{
-            scale: [1, 1.2, 1],
-            rotate: [0, 180, 360],
-          }}
-          transition={{
-            duration: 15,
-            repeat: Infinity,
-            ease: "linear"
-          }}
-        />
-        
-        <div className="container relative z-10">
+      {/* Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-r from-primary/90 via-primary/85 to-secondary/80" />
+
+      {/* Content */}
+      <div className="relative min-h-screen flex items-center">
+        <div className="container">
           <motion.div
             className="max-w-3xl"
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <AnimatedText
-              text={title}
-              className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white"
-            />
+            <motion.h1 
+              className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 text-white leading-tight"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+            >
+              {title}
+            </motion.h1>
+            
             <motion.p
               className="text-xl md:text-2xl text-white/90 mb-8"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3, duration: 0.8 }}
+              transition={{ delay: 0.4 }}
             >
               {subtitle}
             </motion.p>
+
             <motion.div
               className="flex flex-wrap gap-4"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6, duration: 0.8 }}
+              transition={{ delay: 0.6 }}
             >
               <Link to={ctaLink}>
                 <motion.button
-                  className="btn bg-white text-primary hover:bg-gray-100"
+                  className="btn bg-white text-primary hover:bg-gray-100 hover:scale-105 transform transition-all duration-300"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
                   {ctaText}
                 </motion.button>
               </Link>
+              
               {videoBtnText && videoBtnLink && (
                 <a
                   href={videoBtnLink}
-                  className="btn bg-transparent border-2 border-white text-white hover:bg-white/10 inline-flex items-center"
+                  className="btn bg-transparent border-2 border-white text-white hover:bg-white/10 inline-flex items-center group"
                 >
                   <motion.div
-                    className="mr-2"
+                    className="mr-2 group-hover:scale-110 transition-transform"
                     animate={{
                       scale: [1, 1.2, 1],
                     }}
@@ -124,7 +104,24 @@ const Hero: React.FC<HeroProps> = ({
           </motion.div>
         </div>
       </div>
-    </Parallax>
+
+      {/* Animated scroll indicator */}
+      <motion.div 
+        className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
+        animate={{
+          y: [0, 10, 0],
+        }}
+        transition={{
+          duration: 1.5,
+          repeat: Infinity,
+          ease: "easeInOut"
+        }}
+      >
+        <div className="w-6 h-10 border-2 border-white rounded-full flex justify-center">
+          <div className="w-1 h-3 bg-white rounded-full mt-2" />
+        </div>
+      </motion.div>
+    </div>
   );
 };
 
